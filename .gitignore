@@ -1,0 +1,47 @@
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment and editor files
+.env
+.env.*
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Runtime outputs
+result/
+logs/
+*.log
+github_upload/
+
+# Large or private local datasets
+data/*
+
+# Keep curated GitHub demo assets if you add them later
+!docs/
+!docs/images/
+!docs/images/**
+
+# Optional: keep small public demo data under this folder if needed
+!data/
+!data/demo/
+!data/demo/**
