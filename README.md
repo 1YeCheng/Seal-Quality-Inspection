@@ -1,4 +1,4 @@
-# Multimodal Seal Quality Inspection System
+# Seal Quality Inspection System
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?logo=opencv&logoColor=white)
