@@ -12,7 +12,7 @@ This project was developed as a practical image-processing system rather than a 
 
 ## Preview
 
-![Desktop UI](docs/images/ui_screenshot.png)
+![Desktop UI](docs/images/ui_runtime_detection.png)
 
 The desktop interface provides real-time inspection, 2D/IR image review, feature tables, package-level decisions, local logs, and NG record browsing.
 
@@ -173,7 +173,7 @@ NG traceability and log review:
 
 | NG browser | Log window |
 | --- | --- |
-| ![NG trace example](docs/images/ng_trace_example.png) | ![Log window](docs/images/log_window.png) |
+| ![NG trace example](docs/images/ng_trace_example.png) | ![Log window](docs/images/log_review_window.png) |
 
 ## Data Availability
 
@@ -184,11 +184,11 @@ The full local dataset and generated inspection results are not intended to be c
 For a stronger project page, add a few selected images under `docs/images/`:
 
 ```text
-docs/images/ui_screenshot.png
+docs/images/ui_runtime_detection.png
 docs/images/2d_detection_example.jpg
 docs/images/ir_detection_example.jpg
 docs/images/ng_trace_example.jpg
-docs/images/log_window.png
+docs/images/log_review_window.png
 ```
 
 These images are referenced in the README preview and output sections. A screenshot of the UI and two annotated detection examples make the project much easier to understand at a glance.
