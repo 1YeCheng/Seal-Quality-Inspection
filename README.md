@@ -1,10 +1,11 @@
 # Seal Quality Inspection System
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?logo=opencv&logoColor=white)
-![PyQt5](https://img.shields.io/badge/UI-PyQt5-41CD52)
-![Status](https://img.shields.io/badge/Status-Research%20Prototype-orange)
-![Demo](https://img.shields.io/badge/Demo-Included-blue)
+![OpenCV](https://img.shields.io/badge/OpenCV-Image%20Processing-5C3EE8?logo=opencv&logoColor=white)
+![PyQt5](https://img.shields.io/badge/PyQt5-Desktop%20UI-41CD52)
+![Inputs](https://img.shields.io/badge/Inputs-2D%20%2B%20Infrared-0F766E)
+![Inspection](https://img.shields.io/badge/Inspection-Batch%20%26%20Real--time-2563EB)
+![Traceability](https://img.shields.io/badge/Traceability-JSON%20%2B%20CSV%20Logs-7C3AED)
 
 This project implements an industrial vision prototype for automatic heat-seal quality inspection. The system combines 2D visible-light images and infrared images to pair corresponding samples, locate seal regions, extract quality-related features, classify each package as OK or NG, and save traceable inspection records.
 
