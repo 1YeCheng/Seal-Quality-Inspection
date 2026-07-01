@@ -6,27 +6,38 @@
 ![Status](https://img.shields.io/badge/Status-Research%20Prototype-orange)
 ![Demo](https://img.shields.io/badge/Demo-Included-blue)
 
-An industrial vision prototype for automatic heat-seal quality inspection. The system combines 2D visible-light images and infrared images to match image pairs, locate seal regions, extract quality-related features, classify each package as OK or NG, and save traceable inspection records.
+This project implements an industrial vision prototype for automatic heat-seal quality inspection. The system combines 2D visible-light images and infrared images to pair corresponding samples, locate seal regions, extract quality-related features, classify each package as OK or NG, and save traceable inspection records.
 
-This project was developed as a practical image-processing system rather than a single algorithm demo. It includes a PyQt5 desktop interface, configurable inspection thresholds, batch processing, NG image traceability, CSV/JSON logging, and simulated IO signals for production-line integration.
+The project is structured as a practical image-processing system. It includes a PyQt5 desktop interface, configurable inspection thresholds, batch processing, NG image archiving, CSV/JSON logging, and simulated IO signals for production-line integration.
 
 ## Preview
 
 ![Desktop UI](docs/images/ui_runtime_detection.png)
 
-The desktop interface provides real-time inspection, 2D/IR image review, feature tables, package-level decisions, local logs, and NG record browsing.
+The desktop interface supports real-time inspection, 2D/IR image review, feature tables, package-level decisions, local logs, and NG record browsing.
 
-## Highlights
+## Technical Route
 
-- Multimodal inspection using both visible-light and infrared images.
-- Timestamp-based pairing between 2D and IR images.
-- Automatic and configurable ROI detection for seal regions.
-- 2D defect analysis based on silver-edge detection and ROI measurements.
-- Infrared seal analysis based on segmentation, geometry, roughness, mean temperature, and temperature uniformity.
-- Package-level decision logic: a package is accepted only when both 2D and IR inspections pass.
-- PyQt5 industrial-style UI for manual review, real-time folder polling, configuration, logs, and NG browsing.
-- Traceable outputs including raw NG images, annotated images, JSON results, and CSV logs.
-- Simulated OK/NG/ALARM/REJECT IO signals for future hardware integration.
+The inspection pipeline first filters 2D and IR image streams by file prefix and extension. Timestamps are parsed from file names. If a timestamp cannot be parsed, file modification time is used as a fallback. The matcher then pairs the nearest 2D and IR images within a configurable time window.
+
+For visible-light inspection, the system first localises the package body and seal region. It supports fixed ROI settings, resolution-specific ROI presets, and automatic ROI search. Within the selected seal region, the detector converts the image to HSV space. It then extracts high-value and low-saturation silver-edge regions, removes small noise by morphological filtering, and measures defect area, maximum connected-component area, component count, and defect ratio. A separate foreign-region mask captures abnormal local variation inside the ROI.
+
+For infrared inspection, the system crops the configured seal ROI and segments the hot seal band. Segmentation can use pseudo-colour HSV ranges, Otsu thresholding, or a fixed threshold. The largest valid contour is measured by width, height, area, angle, aspect ratio, and boundary roughness. Pixel intensity is mapped to an estimated temperature range, which supports reporting of mean temperature and temperature uniformity.
+
+The final decision is made at package level. A sample is marked OK only when image pairing succeeds and both visible-light and infrared inspections pass their rule sets. Each inspection result is saved with annotated images, structured JSON, CSV logs, NG image copies, and simulated IO states.
+
+## Technical Features
+
+- **Multimodal image pairing**: 2D and IR images are matched by prefix, timestamp, file-extension filters, and a configurable maximum time difference.
+- **Adaptive ROI handling**: seal regions can be set manually, selected from resolution-specific presets, or located automatically using package-body cues.
+- **Visible-light defect detection**: silver-edge defects are extracted in HSV space and quantified by area, ratio, component count, and maximum component size.
+- **Foreign-region analysis**: abnormal local variation within the visible-light ROI is measured separately from silver-edge regions.
+- **Infrared seal segmentation**: the IR branch supports pseudo-colour HSV segmentation, Otsu thresholding, and fixed-threshold segmentation.
+- **Geometric quality measurement**: detected seal contours are checked by width, height, area, angle, aspect ratio, and boundary roughness.
+- **Thermal feature estimation**: grayscale intensity is mapped to a configurable temperature range to estimate mean temperature and temperature uniformity.
+- **Rule-based decision fusion**: package-level OK/NG decisions combine pair status, visible-light inspection, infrared inspection, and rule-level failure reasons.
+- **Operational traceability**: the system saves annotated images, raw NG images, per-package JSON files, CSV inspection logs, and simulated IO states.
+- **Desktop and batch execution**: the same inspection service supports PyQt5 review, folder polling, batch evaluation, and simulated production-line IO.
 
 ## System Workflow
 
@@ -37,7 +48,7 @@ The desktop interface provides real-time inspection, 2D/IR image review, feature
 Timestamp parsing and pair matching
         |
         v
-ROI localization and feature extraction
+ROI localisation and feature extraction
         |
         v
 2D inspection + IR inspection
@@ -89,7 +100,7 @@ The main dependencies are:
 python main.py
 ```
 
-The UI supports image inspection, folder polling, result visualization, threshold configuration, log viewing, and NG record browsing.
+The UI supports image inspection, folder polling, result visualisation, threshold configuration, log viewing, and NG record browsing.
 
 ## Run Batch Inspection
 
@@ -106,7 +117,7 @@ data/demo/paired_2D
 data/demo/paired_IR
 ```
 
-and tested with:
+It can be tested with:
 
 ```bash
 python main.py --batch --folder-2d data/demo/paired_2D --folder-ir data/demo/paired_IR
@@ -149,7 +160,7 @@ Most inspection parameters are stored in `config.json`, including:
 - output directories
 - simulated IO signal names and reject duration
 
-This makes the system easy to recalibrate for different image resolutions, lighting conditions, seal materials, and production requirements.
+This allows the system to be recalibrated for different image resolutions, lighting conditions, seal materials, and production requirements.
 
 ## Outputs
 
@@ -161,7 +172,7 @@ When saving is enabled, the system generates:
 - CSV inspection logs
 - simulated IO states
 
-For a public GitHub repository, it is better to upload only a small set of representative demo images and result examples instead of the full production dataset.
+Only the curated demo images and representative result examples are intended for the public repository; full local datasets and generated inspection outputs should remain excluded.
 
 Example inspection results:
 
@@ -179,30 +190,10 @@ NG traceability and log review:
 
 The full local dataset and generated inspection results are not intended to be committed to the public repository. The `.gitignore` file excludes most of `data/` and all of `result/` by default, while allowing the small public demo dataset under `data/demo/`.
 
-## Suggested GitHub Presentation
+## Technical Scope
 
-For a stronger project page, add a few selected images under `docs/images/`:
-
-```text
-docs/images/ui_runtime_detection.png
-docs/images/2d_detection_example.jpg
-docs/images/ir_detection_example.jpg
-docs/images/ng_trace_example.jpg
-docs/images/log_review_window.png
-```
-
-These images are referenced in the README preview and output sections. A screenshot of the UI and two annotated detection examples make the project much easier to understand at a glance.
-
-## Technical Focus
-
-This project demonstrates:
-
-- classical computer vision for industrial inspection
-- multimodal image matching and decision fusion
-- configurable inspection pipelines
-- desktop UI development with PyQt5
-- inspection result traceability and production-oriented logging
+The implementation covers classical computer vision for industrial inspection, multimodal image matching, rule-based decision fusion, configurable processing pipelines, PyQt5 desktop UI development, and traceable inspection logging.
 
 ## Notes
 
-This repository is intended as a research and engineering prototype. For deployment on a real production line, the next steps would include hardware camera integration, real IO/PLC communication, larger-scale validation, and model/threshold calibration on more diverse defect samples.
+The system is a research and engineering prototype. Production deployment would require hardware camera integration, real IO/PLC communication, larger-scale validation, and further calibration on more diverse defect samples.
